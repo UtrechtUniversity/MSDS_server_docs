@@ -1,0 +1,247 @@
+[
+  {
+    "objectID": "serversetup.html",
+    "href": "serversetup.html",
+    "title": "1. Initial setup",
+    "section": "",
+    "text": "Here are the steps to follow in order to set up our department compute server"
+  },
+  {
+    "objectID": "serversetup.html#request-a-virtual-machine",
+    "href": "serversetup.html#request-a-virtual-machine",
+    "title": "1. Initial setup",
+    "section": "1.1. Request a virtual machine",
+    "text": "1.1. Request a virtual machine\nAsk FSBS IT department to set up the latest LTS ubuntu server machine on their server infrastructure, with ports 22 (SSH), 80 (HTTP), and 443 (HTTPS) open. Request a url for the server, we will assume this is msserver.fss.uu.nl. Request a boot disk (/dev/sda) of about 100GB and a scratch / data disk (/dev/sdb) of about 2TB\n\nOur contacts at the IT department are Halim Skori and Martijn van Ackooij"
+  },
+  {
+    "objectID": "serversetup.html#mount-the-data-disk",
+    "href": "serversetup.html#mount-the-data-disk",
+    "title": "1. Initial setup",
+    "section": "1.2. Mount the data disk",
+    "text": "1.2. Mount the data disk\nThe data disk will contain the home directories of the users, as well as any data they have.\nFirst, SSH into the server using the provided admin account (assumed to be labgenius)\nssh labgenius@msserver.fss.uu.nl\n# now enter the password you received from IT\nThen, check if the hard disk is there\nsudo fdisk -l\nThen, follow this guide to create an ext4 formatted partition on /dev/sdb. Note that you probably need to press G instead of O in the first step and some things may be slightly different.\nThen, to mount the new /dev/sdb1 partition, you have to edit /etc/fstab (CAREFULLY), add the following:\n# sdb1 mounted on data\n/dev/sdb1 /data ext4 defaults 0 1\n\nNote that the current implementation of the server also has an additional 1TB disk on /etc/sdc1 mounted to /backup in the same way."
+  },
+  {
+    "objectID": "serversetup.html#create-admin-account",
+    "href": "serversetup.html#create-admin-account",
+    "title": "1. Initial setup",
+    "section": "1.3. Create admin account",
+    "text": "1.3. Create admin account\nNow, create your own admin account (we’ll use erikjan):\nssh labgenius@msserver.fss.uu.nl\n# now enter the password\n\nsudo useradd -m -d /data/erikjan erikjan\nsudo chown -R erikjan /data/erikjan\nsudo chmod -R go-rw /data/erikjan\nsudo adduser erikjan sudo\nsudo passwd erikjan\nNow log out of the default account and log into your own account."
+  },
+  {
+    "objectID": "serversetup.html#update-packages",
+    "href": "serversetup.html#update-packages",
+    "title": "1. Initial setup",
+    "section": "1.4. Update packages",
+    "text": "1.4. Update packages\nRun the following commands to update everything and install the main required packages for our server.\n# update and upgrade\nsudo apt update\nsudo apt upgrade\n\n# change default shell to zsh for convenience\nsudo apt install zsh\nchsh -s /bin/zsh\n\n# run the following if the server was in stalled in minimized mode\nsudo unminimize\n\n# install a boatload more software\n# some of these are packages, some of these are libraries needed to install R packages\nsudo apt install htop curl gdebi-core make build-essential libcurl4-openssl-dev zlib1g-dev libxml2-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev gfortran libblas-dev liblapack-dev libapparmor-dev cmake libudunits2-dev libgdal-dev gdal-bin software-properties-common dirmngr cargo rustc pandoc\n\n# now a reboot may be in order\nsudo reboot \nAfter the machine has rebooted, ssh into it again with your account."
+  },
+  {
+    "objectID": "serversetup.html#add-admin-management-program",
+    "href": "serversetup.html#add-admin-management-program",
+    "title": "1. Initial setup",
+    "section": "1.5. Add admin management program",
+    "text": "1.5. Add admin management program\nSeveral scripts can make adminning a bit easier and more user-friendly. We’ve created a separate repo for this: UtrechtUniversity/MSDS_server_adm.\nTo install the admin program, run:\nsudo curl -fsSL https://raw.githubusercontent.com/UtrechtUniversity/MSDS_server_adm/HEAD/install.sh | sh"
+  },
+  {
+    "objectID": "serversetup.html#installing-r",
+    "href": "serversetup.html#installing-r",
+    "title": "1. Initial setup",
+    "section": "2.1. Installing R",
+    "text": "2.1. Installing R\nThere are two options for installing R, either via apt or by compiling from source. I will show both here, but for the latest server we need to do the latter to enable full use of the 240 cores. To see if this is still needed, keep an eye on this github issue For both methods, you should first set up the official R apt repository source. The below instructions come directly from CRAN here in November 2024 and may need to be adjusted for later versions of R.\n# update indices\nsudo apt update -qq\n# install two helper packages we need\nsudo apt install --no-install-recommends software-properties-common dirmngr\n# add the signing key (by Michael Rutter) for these repos\n# To verify key, run gpg --show-keys /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc \n# Fingerprint: E298A3A825C0D65DFD57CBB651716619E084DAB9\nwget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc\n# add the R 4.0 repo from CRAN\nsudo add-apt-repository \"deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/\"\n\n2.1.1. Installing R through the package manager\nInstalling R through the package manager is now easy peasy:\nsudo apt install --no-install-recommends r-base\nNow there will be an R version in /usr/bin/R, and the installation will be at /usr/lib/R.\n\n\n2.1.2. Compiling R from source\nTo use all the cores, we need to create a version of R with a higher-than-default number of simultaneously allowed “connections”. For this, we need to download the source code of R itself, then adjust a value in the file connections.c and then compile R.\nMore info on compiling R from source is here, and more info on this connections thing is here.\nFirst, add the R source repository to the apt sources using the built-in nano text editor\n# find the name of the source list\nsudo ls /etc/apt/sources.list.d\n# for me it's the file with the beautiful name archive_uri-https_cloud_r-project_org_bin_linux_ubuntu-noble.list\nsudo nano /etc/apt/sources.list.d/archive_uri-https_cloud_r-project_org_bin_linux_ubuntu-noble.list\nThis file will look something like this:\ndeb https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/\n# deb-src https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/\nRemove the comment symbol to make it look like this:\ndeb https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/\ndeb-src https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/\nTo close and save the updated file, press ctrl+x to close it and then y to save.\nNow, we can install build dependencies:\nsudo apt update\nsudo apt build-dep r-base\nNow it’s time to download the R source code\n# Update the version in the lines below\n# download the sources\ncurl -O https://cran.r-project.org.com/src/base/R-4/R-4.4.2.tar.gz\n# uncompress the source folder\ntar -xzvf R-4.4.2.tar.gz\n# move to that folder\ncd R-4.4.2\nThen, we are actually going to edit the source code:\nsudo nano src/main/connections.c\nNow scroll down to the line containing\nstatic int NCONNECTIONS = 128; /* need one per cluster node */\nand change the value 128 to something reasonable like 512. Then ctrl+x, y and we’re ready to build R!\n# again change the R version to the correct one\n./configure \\\n  --prefix=/opt/R/4.4.2 \\\n  --enable-R-shlib \\\n  --enable-memory-profiling \\\n  --with-blas \\\n  --with-lapack\n\nmake -j 24\nsudo make install\nDone! Now you have R installed under /opt/R/4.4.2. You should make links to /usr/bin/ so you can run R by just typing R in the console, and so RStudio Server can find R:\nsudo ln -s /opt/R/4.4.2/bin/R /usr/bin/R\nsudo ln -s /opt/R/4.4.2/bin/Rscript /usr/bin/Rscript"
+  },
+  {
+    "objectID": "serversetup.html#configuring-r",
+    "href": "serversetup.html#configuring-r",
+    "title": "1. Initial setup",
+    "section": "2.2. Configuring R",
+    "text": "2.2. Configuring R\nInstall basic packages in the main library that everyone gets to use:\nsudo R\ninstall.packages(c(\"tidyverse\", \"devtools\"), Ncpus = 24)\nq(\"no\")\nIf there are issues with this, refer to the relevant server administration page."
+  },
+  {
+    "objectID": "serversetup.html#installing-rstudio-server",
+    "href": "serversetup.html#installing-rstudio-server",
+    "title": "1. Initial setup",
+    "section": "2.3. Installing RStudio server",
+    "text": "2.3. Installing RStudio server\nRStudio server is installed basically as standard, following the main installation documentation here\n# this will change based on the version of RStudio and the version of the server\nwget https://download2.rstudio.org/server/jammy/amd64/rstudio-server-2024.12.1-563-amd64.deb\nsudo gdebi rstudio-server-2024.12.1-563-amd64.deb\nThen, the RStudio server will need to be configured as well.\nsudo nano /etc/rstudio/rserver.conf\nThis file should look like this:\n# Server Configuration File\nwww-port=8787\nThen ctrl+x, y and move on to the next configuration file:\nsudo nano /etc/rstudio/rsession.conf\nWhich should look like this:\n# R Session Configuration File\nsession-timeout-minutes=0\n\n# library path\nr-libs-user=~/R/packages\nNow, we should stop and restart RStudio server and it will be ready!\nsudo rstudio-server stop\nsudo rstudio-server verify-installation\nsudo rstudio-server start\n\nNB: the server will listen on port 8787, which is not accessible from outside the server itself. We need to set up a reverse proxy to make the RStudio service available. This is done in the next section."
+  },
+  {
+    "objectID": "serversetup.html#setting-up-ssl-keyfiles",
+    "href": "serversetup.html#setting-up-ssl-keyfiles",
+    "title": "1. Initial setup",
+    "section": "3.1. Setting up SSL keyfiles",
+    "text": "3.1. Setting up SSL keyfiles\nWe want to make the server available through a secure connection over https. Therefore, we need SSL certificate files that our nginx server can refer to. Those files are in the following locations:\n/etc/cert/msserver_fss_uu_nl.pem\n/etc/cert/msserver.fss.uu.key\nThe IT department handles the creation and renewal of these certificates automatically through a cronjob. When requesting the virtual machine (see section 1.1), ask the IT department to set up the TLS certificate management for the server’s domain (msserver.fss.uu.nl). They will configure a cronjob that places and renews the certificate files in /etc/cert/.\nVerify that the certificate files are present and valid:\n# check that the files exist\nls -la /etc/cert/\n\n# check the certificate expiry date\nopenssl x509 -enddate -noout -in /etc/cert/msserver_fss_uu_nl.pem\n\nIf there are any issues with the certificates (e.g., expired or missing files), contact the IT department."
+  },
+  {
+    "objectID": "serversetup.html#installing-nginx",
+    "href": "serversetup.html#installing-nginx",
+    "title": "1. Initial setup",
+    "section": "3.2. Installing nginx",
+    "text": "3.2. Installing nginx\nInstalling nginx is as easy as downloading it from the ubuntu repo:\nsudo apt install nginx\nThis already enables the webserver which listens for incoming traffic and can then do stuff to serve different things."
+  },
+  {
+    "objectID": "serversetup.html#configuring-nginx",
+    "href": "serversetup.html#configuring-nginx",
+    "title": "1. Initial setup",
+    "section": "3.3. Configuring nginx",
+    "text": "3.3. Configuring nginx\nTo make nginx route traffic from http (port 80) and https (port 443) to Rstudio server (port 8787), we need to configure it. Configuration of nginx happens in configuration files in the folder /etc/nginx/sites-available/ and /etc/nginx/sites-enabled/.\nFirst, create and edit a configuration file called reverse_proxy.conf in the sites-available directory:\nsudo nano /etc/nginx/sites-available/reverse_proxy_https.conf\nThen, ensure that the content of this file is the same as the file here: reverse_proxy_https.conf. A few things happen there:\n\nReroute any http traffic to https\nReroute msserver.fss.uu.nl/docs to this documentation website\nSet up SSL (secure traffic over https) with certificates\nTurn off the access log\nForward any website traffic to RStudio server\n\nSave the file (ctrl+x and then y) and then enable the site by creating a link to it in the sites-enabled directory:\nsudo ln -s /etc/nginx/sites-available/reverse_proxy_https.conf /etc/nginx/sites-enabled/reverse_proxy.conf\nAs a fallback, we also have the HTTP-only version without SSL: reverse_proxy_http.conf. To enable this one, put this next to the https conf file, and route the link to that file instead. If/when you do: test and reload the config as follows:\nsudo nginx -t\nsudo systemctl reload nginx\nRStudio server should now be available at https://msserver.fss.uu.nl from the university network or via VPN!"
+  },
+  {
+    "objectID": "userdocs.html",
+    "href": "userdocs.html",
+    "title": "1. Contact information",
+    "section": "",
+    "text": "This is the documentation for using the MSDS department compute server."
+  },
+  {
+    "objectID": "userdocs.html#rstudio-server",
+    "href": "userdocs.html#rstudio-server",
+    "title": "1. Contact information",
+    "section": "2.1. RStudio server",
+    "text": "2.1. RStudio server\nThe easiest way to connect is to type in your browser the following URL: msserver.fss.uu.nl. You wil be greeted with an RStudio login window. This works best in google chrome or mozilla firefox."
+  },
+  {
+    "objectID": "userdocs.html#ssh-connection",
+    "href": "userdocs.html#ssh-connection",
+    "title": "1. Contact information",
+    "section": "2.2. SSH connection",
+    "text": "2.2. SSH connection\nAlternatively, you can install an ssh client and connect to the server via ssh. In a terminal, enter ssh username@msserver.fss.uu.nl, then enter your password, and you will be logged in to the server, at your own home directory. In this way, it is possible to run loads of other software than R, for example python (preferably through uv) or julia (through juliaup)"
+  },
+  {
+    "objectID": "userdocs.html#updating-the-password",
+    "href": "userdocs.html#updating-the-password",
+    "title": "1. Contact information",
+    "section": "3.1. Updating the password",
+    "text": "3.1. Updating the password\nLogin to the server, open a terminal within the rstudio browser window (shift + alt + R), type passwd &lt;your-user-name&gt; (for example passwd erikjan) and follow the prompts."
+  },
+  {
+    "objectID": "userdocs.html#scheduling-time",
+    "href": "userdocs.html#scheduling-time",
+    "title": "1. Contact information",
+    "section": "4.1. Scheduling time",
+    "text": "4.1. Scheduling time\nMultiple users can connect to the server at the same time. If you are preparing your simulation or just trying out small stuff, you can always login to the server. If you want to run a large simulation, please reserve time for this on the Google sheet schedule.\nPlease try to keep the maximum reservation time to maximum 1 week in busy periods. The schedule includes a “% use” column, this means either the maximum percentage of cores you will use or the maximum percentage of RAM you will use, whichever is biggest. (Don’t worry too much about this, just try to estimate it a little bit by running a test and guesstimating).\nYou can estimate how much time and memory you will need with the ‘Profiling’ tool in RStudio on the server.1 You can also use htop in the terminal while running a pilot script, or use the object.size() function in the R console to check how big your output will be."
+  },
+  {
+    "objectID": "userdocs.html#server-specifications",
+    "href": "userdocs.html#server-specifications",
+    "title": "1. Contact information",
+    "section": "4.2. Server specifications",
+    "text": "4.2. Server specifications\nThe server is a virtual server running on quite serious hardware. The server can be scaled up to the following:\nCPU     :  2x INTEL(R) XEON(R) PLATINUM 8580\nThreads :  240\nMemory  :  1TB\nGPU     :  None\nStorage :  Main disk : 2.0T /data\n           OS disk   : 58G  /\nHowever, by default the server has fewer threads (usually around 224). To check from R how many threads are available, run parallel::detectCores()."
+  },
+  {
+    "objectID": "userdocs.html#transferring-data-to-the-server",
+    "href": "userdocs.html#transferring-data-to-the-server",
+    "title": "1. Contact information",
+    "section": "4.3. Transferring data to the server",
+    "text": "4.3. Transferring data to the server\nRStudio server has a nice “upload” functionality in the files pane, where you can upload individual files or whole folders as a zip file (which is automatically extracted, nice for RStudio projects).\nAnother, more robust option for transferring data to the server is through the scp (secure copy) command in the terminal of your own computer. For example, to transfer the folder my_project in the current working directory to your home folder on the server:\nscp -rC ./my_project username@msserver.fss.uu.nl:~/"
+  },
+  {
+    "objectID": "userdocs.html#storing-data",
+    "href": "userdocs.html#storing-data",
+    "title": "1. Contact information",
+    "section": "4.4. Storing data",
+    "text": "4.4. Storing data\nPlease exclusively use your home directory (/data/&lt;your-user-name&gt;/, or alternatively ~/), which is on the main drive. No other user has access to your files there (except the admin).\nExample\nmy_big_matrix &lt;- matrix(0, 1e4, 1e4)\nsaveRDS(my_big_matrix, \"~/bigfile.rds\")\n\n[!CAUTION] Some programs or R packages store large amounts of data in the /tmp directory on the OS disk. Please make sure that this does not fill up the harddisk or the RStudio server will crash.\nFor example, for brms / cmdstanr, first create a custom directory in your home directory (e.g., ~/tmp), and then set options(cmdstanr_output_dir = \"~/tmp\") at the start of your script. Then, make sure to use the cmdstanr backend in your call to brms::brm(). If you are running cmdstanr in parallel, you may need to pass the temporary folder directly during the Markov chain Monte Carlo algorithm (e.g., cmdstan_model$sample(…, output_dir = \"~/tmp\")).\n\n\n4.4.1. Backing up your data\n\n[!IMPORTANT] You are responsible for archiving your data. We provide no guarantees on backing up your data. Consider your home directory as temporary/scratch storage.\n\nAfter running simulations, it is wise to archive your results somewhere you can access them in case the hard drive of the server somehow breaks or if we need to free up the space. You can do this from the RStudio server by selecting “download” in the files tab.\nIt can also be done using the scp command from your own computer via the terminal (if you have it installed).\nExample\nTo copy the entire folder simulation_folder to the local backup folder local_backup, the user testuser can run the following command:\nscp -rC testuser@msserver.fss.uu.nl:~/simulation_folder local_backup"
+  },
+  {
+    "objectID": "userdocs.html#r-sessions",
+    "href": "userdocs.html#r-sessions",
+    "title": "1. Contact information",
+    "section": "4.5. R sessions",
+    "text": "4.5. R sessions\nWhen you log in, you start an R session. It will remain open until you stop it, even if you close the window. To close the session, click the red ‘quit’ button in the top right corner. Please always close your R session when you are done. The current R version is the following:\nR version 4.4.2 (2024-10-31) -- \"Pile of Leaves\"\nCopyright (C) 2024 The R Foundation for Statistical Computing\nPlatform: x86_64-pc-linux-gnu"
+  },
+  {
+    "objectID": "userdocs.html#r-packages",
+    "href": "userdocs.html#r-packages",
+    "title": "1. Contact information",
+    "section": "4.6. R packages",
+    "text": "4.6. R packages\nEveryone gets their own personal R package repository automatically in ~/R/packages. There should not be any interference with package versions.\nFor robustness, we have installed the pak package manager. Please use it. It can install packages from CRAN and Bioconductor (pak::pak(\"tidyverse\")), GitHub (pak::pak(\"vankesteren/pensynth\")) local files (pak::local_install(\"~/uploads/my_package\")), and more.\nIf installation fails for a package, this is likely due to system libraries not being installed. Please try to figure out which system library is needed, you can use the functions: pak::pkg_sysreqs() and pak::sysreqs_check_installed(). Contact the admin to install the system library for you.\nThis is what such a warning may look like upon trying to install a package (missing libmpfr-dev library):\nchecking mpfr.h usability... no\nchecking mpfr.h presence... no\nchecking for mpfr.h... no\nconfigure: error: Header file mpfr.h not found; maybe use --with-mpfr-include=INCLUDE_PATH\nIn addition, global packages are installed for everyone to use by default. If you want to use a newer version of a preinstalled package, simply install it as normal and your own version will be used.\n\n\n\nPreinstalled packages\nVersion\n\n\n\n\ndevtools\n2.4.5\n\n\npak\n0.8.0.1"
+  },
+  {
+    "objectID": "userdocs.html#parallel-processing",
+    "href": "userdocs.html#parallel-processing",
+    "title": "1. Contact information",
+    "section": "4.7. Parallel processing",
+    "text": "4.7. Parallel processing\nMultiple people can be logged into the server at the same time. If you reserve time on the server, you can use it, but please leave at least 4 cores available for other people to prepare their simulations.\nIf you want to know how many cores are currently being used (and by whom), open a terminal (shift + alt + R in RStudio) and type htop.\nParallel processing clusters can be set up using various packages, such as parallel (built into R), future, parallelly and more. An example is cl &lt;- parallel::makeCluster(220).\n\n[!CAUTION] Make sure to close your cluster once you’re done with it, for example using parallel::stopCluster(cl). Otherwise, the server will have many processes left open.\n\nI like using the package pbapply for parallel simulations, but you can use any method :)\nIn R, some packages / functions use OpenMP to parallellize underlying C/C++ code. By default, the behaviour of these programs is to use all the cores of a system. An example of such a function is mgcv::bam(). If your code uses such functions, you can restrict the number of cores used by putting the following code at the top of your R script:\nSys.setenv(\"OMP_THREAD_LIMIT\" = 220)"
+  },
+  {
+    "objectID": "userdocs.html#additional-software",
+    "href": "userdocs.html#additional-software",
+    "title": "1. Contact information",
+    "section": "4.8. Additional software",
+    "text": "4.8. Additional software\n\n\n\nSoftware\nLocation\n\n\n\n\nMplus\n/opt/mplus/8.11\n\n\n\n\nFor python, please use uv to manage and run different versions for your own user account. This is portable, fast, and flexible.\nFor Julia, use juliaup for the same reasons.\n\nIf you have questions about additional software, send a message to the admin.\n\n4.8.1. Visual studio code remote programming\nYou can also connect to the server via visual studio code. Just install the Remote - SSH extension and use it to connect to the server via SSH.\n\n\n4.8.2. How to run additional software with a GUI\nFor Windows: 1. Install XMing and Putty. 2. Run XMing on your computer – this will start an X server to accept incoming display connections 3. Run putty with the following configuration: - Host name: msserver.fss.uu.nl - Port: 22 - under Connection &gt; SSH &gt; X11: check enable X11 forwarding and set X display location = localhost:0.0 4. Click open in putty 5. type in your username and password 6. run the program, for example pycharm.\nA display should now open. If it does not, contact the administrator."
+  },
+  {
+    "objectID": "userdocs.html#footnotes",
+    "href": "userdocs.html#footnotes",
+    "title": "1. Contact information",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nFor background info on profiling, see e.g. the Advanced R book. For practical tips on using the Profiling tool, see e.g. the Posit support page.↩︎"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "MSDS department compute server",
+    "section": "",
+    "text": "MSDS department compute server\n\n\n\nImage generated with https://deepai.org/machine-learning-model/text2img\n\n\nThis is the documentation page for the Methodology, Statistics, & Data Science department compute server. Select the relevant section below.\n\nUser documentation\nServer administration guide\nServer configuration guide"
+  },
+  {
+    "objectID": "serveradmin.html",
+    "href": "serveradmin.html",
+    "title": "1. Creating a user account",
+    "section": "",
+    "text": "1. Creating a user account\n\n1.1. Send the following email to the user\n1.2. Create the actual account\n1.3. Add the user to the teams page\n1.4. Email the user\n1.5. Add/remove admin rights\n\n2. Deleting a user account\n3. Server monitoring\n\n3.1. Process monitoring\n3.2. Main storage monitoring\n3.3. Temporary folder monitoring\n\n4. Managing RStudio sessions\n5. Fixing R package installation errors\n6. Updating R"
+  },
+  {
+    "objectID": "serveradmin.html#send-the-following-email-to-the-user",
+    "href": "serveradmin.html#send-the-following-email-to-the-user",
+    "title": "1. Creating a user account",
+    "section": "1.1. Send the following email to the user",
+    "text": "1.1. Send the following email to the user\n\nDear {user},\nThank you for your request for an account on the M&S department compute server. In the URL below is the documentation, please read it carefully and then send me an email to request an account (optionally with your desired username).\nhttps://utrechtuniversity.github.io/MSDS_server_docs/userdocs\nKind regards,\n{your name}"
+  },
+  {
+    "objectID": "serveradmin.html#create-the-actual-account",
+    "href": "serveradmin.html#create-the-actual-account",
+    "title": "1. Creating a user account",
+    "section": "1.2. Create the actual account",
+    "text": "1.2. Create the actual account\nAfter receiving the formal request for an account, it is time to create the account. We have some nice user-friendly scripts installed on the system to do this (adm stands for admin):\nsudo adm user add &lt;username&gt; &lt;password&gt; &lt;emailaddress&gt;"
+  },
+  {
+    "objectID": "serveradmin.html#add-the-user-to-the-teams-page",
+    "href": "serveradmin.html#add-the-user-to-the-teams-page",
+    "title": "1. Creating a user account",
+    "section": "1.3. Add the user to the teams page",
+    "text": "1.3. Add the user to the teams page\nWe also have a teams page where we stay in contact, ask questions, and generally keep track of who is doing research with the server. Add the user to the page as well."
+  },
+  {
+    "objectID": "serveradmin.html#email-the-user",
+    "href": "serveradmin.html#email-the-user",
+    "title": "1. Creating a user account",
+    "section": "1.4. Email the user",
+    "text": "1.4. Email the user\n\nDear {user},\nAn account has been created for you on the department compute server.\nUsername: {username} Temporary password: {password}\nPlease update your password as soon as possible.\nIf you have any questions, do not hesitate to ask! I have added you to the department computer teams page.\nHappy computing!\n{your name}"
+  },
+  {
+    "objectID": "serveradmin.html#addremove-admin-rights",
+    "href": "serveradmin.html#addremove-admin-rights",
+    "title": "1. Creating a user account",
+    "section": "1.5. Add/remove admin rights",
+    "text": "1.5. Add/remove admin rights\nIf a user should be an admin, run the following\nsudo adm user sudo add &lt;username&gt;\nAlso: - add them to the contact information in the userdocs - make them an owner on the microsoft teams page\nIf you want to remove a sudoer, run\nsudo adm user sudo remove &lt;username&gt;\nAlso: - remove them from the userdocs contact table - make them a member (not an owner) of the microsoft teams page"
+  },
+  {
+    "objectID": "serveradmin.html#process-monitoring",
+    "href": "serveradmin.html#process-monitoring",
+    "title": "1. Creating a user account",
+    "section": "3.1. Process monitoring",
+    "text": "3.1. Process monitoring\nGenerally, the command htop is used to check for server usage, processes open by different users, and more. From there, stuck processes can be killed.\nsudo htop\n(there are also alternatives like btop which will display all threads in a big enough terminal window)"
+  },
+  {
+    "objectID": "serveradmin.html#main-storage-monitoring",
+    "href": "serveradmin.html#main-storage-monitoring",
+    "title": "1. Creating a user account",
+    "section": "3.2. Main storage monitoring",
+    "text": "3.2. Main storage monitoring\nTo ensure the /data disk is not filled up, you can check the overall usage and per-user usage using the following commands:\n# human-readable free space on the disk\ndf -h /data\nIf the disk is full (which happens), you will get errors like\n\nwrite error: no space left on device\n\nand for the RStudio server, maybe even\n\nCould not connect to the R session on Rstudio server. Error occurred during transmission (6)\n\nYou can check per-user disk usage with\n# this may take some time\nsudo adm disk usage\nIf any user is using outrageous amounts of data, tell them to download it via the “Backing up your data” section in the user docs and then delete it."
+  },
+  {
+    "objectID": "serveradmin.html#temporary-folder-monitoring",
+    "href": "serveradmin.html#temporary-folder-monitoring",
+    "title": "1. Creating a user account",
+    "section": "3.3. Temporary folder monitoring",
+    "text": "3.3. Temporary folder monitoring\nSome packages in R create a lot of data in the /tmp directory. Since this is on the (small) main boot disk, this can crash out RStudio server (“white screen of death”). To check available space, run\nsudo df -h /tmp\nTo check for particularly big Rtmp folders:\nsudo du -hs /tmp/Rtmp*\nThen delete a folder using\n# example\nsudo rm -r /tmp/Rtmp7jVKku\n(Nuclear option, do not run while users are running stuff):\nsudo find /tmp/Rtmp* -maxdepth 0 | xargs sudo rm -r\nKnown use-cases that have this problem are:\n\ncmdstanr or brms: these save posterior samples as csv files in an R temp directory. Mitigation through creating a ~/tmp directory, and then setting options(cmdstanr_output_dir = \"~/tmp\") and using backend = \"cmdstanr\". Within the simulation, this directory should be emptied regularly."
+  }
+]

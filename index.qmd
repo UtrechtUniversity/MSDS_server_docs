@@ -1,0 +1,9 @@
+# MSDS department compute server
+
+![Image generated with https://deepai.org/machine-learning-model/text2img](server.png)
+
+This is the documentation page for the Methodology, Statistics, & Data Science department compute server. Select the relevant section below.
+
+- [User documentation](userdocs.qmd)
+- [Server administration guide](serveradmin.qmd)
+- [Server configuration guide](serversetup.qmd)

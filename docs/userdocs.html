@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>userdocs – MSDS Compute Server documentation</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./server.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-158031087360bce0ff56dc785ce39e06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">MSDS Compute Server documentation</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./userdocs.html" aria-current="page"> 
+<span class="menu-text">User documentation</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./serveradmin.html"> 
+<span class="menu-text">Server administration guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./serversetup.html"> 
+<span class="menu-text">Server configuration guide</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#contact-information" id="toc-contact-information" class="nav-link active" data-scroll-target="#contact-information">1. Contact information</a></li>
+  <li><a href="#connecting-to-the-server" id="toc-connecting-to-the-server" class="nav-link" data-scroll-target="#connecting-to-the-server">2. Connecting to the server</a>
+  <ul class="collapse">
+  <li><a href="#rstudio-server" id="toc-rstudio-server" class="nav-link" data-scroll-target="#rstudio-server">2.1. RStudio server</a></li>
+  <li><a href="#ssh-connection" id="toc-ssh-connection" class="nav-link" data-scroll-target="#ssh-connection">2.2. SSH connection</a></li>
+  </ul></li>
+  <li><a href="#user-account" id="toc-user-account" class="nav-link" data-scroll-target="#user-account">3. User account</a>
+  <ul class="collapse">
+  <li><a href="#updating-the-password" id="toc-updating-the-password" class="nav-link" data-scroll-target="#updating-the-password">3.1. Updating the password</a></li>
+  </ul></li>
+  <li><a href="#using-the-server" id="toc-using-the-server" class="nav-link" data-scroll-target="#using-the-server">4. Using the server</a>
+  <ul class="collapse">
+  <li><a href="#scheduling-time" id="toc-scheduling-time" class="nav-link" data-scroll-target="#scheduling-time">4.1. Scheduling time</a></li>
+  <li><a href="#server-specifications" id="toc-server-specifications" class="nav-link" data-scroll-target="#server-specifications">4.2. Server specifications</a></li>
+  <li><a href="#transferring-data-to-the-server" id="toc-transferring-data-to-the-server" class="nav-link" data-scroll-target="#transferring-data-to-the-server">4.3. Transferring data to the server</a></li>
+  <li><a href="#storing-data" id="toc-storing-data" class="nav-link" data-scroll-target="#storing-data">4.4. Storing data</a>
+  <ul class="collapse">
+  <li><a href="#backing-up-your-data" id="toc-backing-up-your-data" class="nav-link" data-scroll-target="#backing-up-your-data">4.4.1. Backing up your data</a></li>
+  </ul></li>
+  <li><a href="#r-sessions" id="toc-r-sessions" class="nav-link" data-scroll-target="#r-sessions">4.5. R sessions</a></li>
+  <li><a href="#r-packages" id="toc-r-packages" class="nav-link" data-scroll-target="#r-packages">4.6. R packages</a></li>
+  <li><a href="#parallel-processing" id="toc-parallel-processing" class="nav-link" data-scroll-target="#parallel-processing">4.7. Parallel processing</a></li>
+  <li><a href="#additional-software" id="toc-additional-software" class="nav-link" data-scroll-target="#additional-software">4.8. Additional software</a>
+  <ul class="collapse">
+  <li><a href="#visual-studio-code-remote-programming" id="toc-visual-studio-code-remote-programming" class="nav-link" data-scroll-target="#visual-studio-code-remote-programming">4.8.1. Visual studio code remote programming</a></li>
+  <li><a href="#how-to-run-additional-software-with-a-gui" id="toc-how-to-run-additional-software-with-a-gui" class="nav-link" data-scroll-target="#how-to-run-additional-software-with-a-gui">4.8.2. How to run additional software with a GUI</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<p>This is the documentation for using the MSDS department compute server.</p>
+<ul>
+<li><a href="#1-contact-information">1. Contact information</a></li>
+<li><a href="#2-connecting-to-the-server">2. Connecting to the server</a>
+<ul>
+<li><a href="#21-rstudio-server">2.1. RStudio server</a></li>
+<li><a href="#22-ssh-connection">2.2. SSH connection</a></li>
+</ul></li>
+<li><a href="#3-user-account">3. User account</a>
+<ul>
+<li><a href="#31-updating-the-password">3.1. Updating the password</a></li>
+</ul></li>
+<li><a href="#4-using-the-server">4. Using the server</a>
+<ul>
+<li><a href="#41-scheduling-time">4.1. Scheduling time</a></li>
+<li><a href="#42-server-specifications">4.2. Server specifications</a></li>
+<li><a href="#43-transferring-data-to-the-server">4.3. Transferring data to the server</a></li>
+<li><a href="#44-storing-data">4.4. Storing data</a>
+<ul>
+<li><a href="#441-backing-up-your-data">4.4.1. Backing up your data</a></li>
+</ul></li>
+<li><a href="#45-r-sessions">4.5. R sessions</a></li>
+<li><a href="#46-r-packages">4.6. R packages</a></li>
+<li><a href="#47-parallel-processing">4.7. Parallel processing</a></li>
+<li><a href="#48-additional-software">4.8. Additional software</a>
+<ul>
+<li><a href="#481-visual-studio-code-remote-programming">4.8.1. Visual studio code remote programming</a></li>
+<li><a href="#482-how-to-run-additional-software-with-a-gui">4.8.2. How to run additional software with a GUI</a></li>
+</ul></li>
+</ul></li>
+</ul>
+<section id="contact-information" class="level1">
+<h1>1. Contact information</h1>
+<p>The administrators for the server are:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">login</th>
+<th style="text-align: left;">email</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><del>Erik-Jan</del></td>
+<td style="text-align: left;"><del>erikjan</del></td>
+<td style="text-align: left;"><del>e.vankesteren1@uu.nl</del></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Javier</td>
+<td style="text-align: left;">javier</td>
+<td style="text-align: left;">j.garciabernardo@uu.nl</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="connecting-to-the-server" class="level1">
+<h1>2. Connecting to the server</h1>
+<p>Connecting to the server is only available in two ways: - from our department’s Utrecht University network - via Utrecht University <a href="https://vpn.uu.nl">vpn</a> from anywhere.</p>
+<section id="rstudio-server" class="level2">
+<h2 class="anchored" data-anchor-id="rstudio-server">2.1. RStudio server</h2>
+<p>The easiest way to connect is to type in your browser the following URL: <a href="http://msserver.fss.uu.nl">msserver.fss.uu.nl</a>. You wil be greeted with an <code>RStudio</code> login window. This works best in google chrome or mozilla firefox.</p>
+</section>
+<section id="ssh-connection" class="level2">
+<h2 class="anchored" data-anchor-id="ssh-connection">2.2. SSH connection</h2>
+<p>Alternatively, you can install an ssh client and connect to the server via ssh. In a terminal, enter <code>ssh username@msserver.fss.uu.nl</code>, then enter your password, and you will be logged in to the server, at your own home directory. In this way, it is possible to run loads of other software than <code>R</code>, for example <code>python</code> (preferably through <a href="https://docs.astral.sh/uv/"><code>uv</code></a>) or <code>julia</code> (through <a href="https://github.com/JuliaLang/juliaup"><code>juliaup</code></a>)</p>
+</section>
+</section>
+<section id="user-account" class="level1">
+<h1>3. User account</h1>
+<p>To access the server, you need a login / user account, which is available on request. A user account needs to be manually created for you. Send an email to the admin (Erik-Jan) for this, <em>with an explanation of why you want to use the computer</em>. You will receive a default password which you can change when you first log in.</p>
+<section id="updating-the-password" class="level2">
+<h2 class="anchored" data-anchor-id="updating-the-password">3.1. Updating the password</h2>
+<p>Login to the server, open a terminal within the <code>rstudio</code> browser window (<code>shift + alt + R</code>), type <code>passwd &lt;your-user-name&gt;</code> (for example <code>passwd erikjan</code>) and follow the prompts.</p>
+</section>
+</section>
+<section id="using-the-server" class="level1">
+<h1>4. Using the server</h1>
+<p>To use the server, abide by these rules:</p>
+<ol type="1">
+<li>Please read the below carefully.</li>
+<li>If you aren’t sure about something, read again and then <em>ask</em> before doing.</li>
+<li>If you misuse the server, your account will be suspended.</li>
+</ol>
+<section id="scheduling-time" class="level2">
+<h2 class="anchored" data-anchor-id="scheduling-time">4.1. Scheduling time</h2>
+<p>Multiple users can connect to the server at the same time. If you are preparing your simulation or just trying out small stuff, you can always login to the server. If you want to run a large simulation, please reserve time for this on the <a href="https://docs.google.com/spreadsheets/d/1YmaAHvosjAvPZCP4mZkHpW-yuWUnar4o5oMbvXBvWIg/edit?usp=sharing">Google sheet schedule</a>.</p>
+<p>Please try to keep the maximum reservation time to maximum 1 week in busy periods. The schedule includes a “% use” column, this means either the maximum percentage of cores you will use or the maximum percentage of RAM you will use, whichever is biggest. (Don’t worry too much about this, just try to estimate it a little bit by running a test and guesstimating).</p>
+<p>You can estimate how much time and memory you will need with the ‘Profiling’ tool in RStudio on the server.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> You can also use <code>htop</code> in the terminal while running a pilot script, or use the <code>object.size()</code> function in the R console to check how big your output will be.</p>
+</section>
+<section id="server-specifications" class="level2">
+<h2 class="anchored" data-anchor-id="server-specifications">4.2. Server specifications</h2>
+<p>The server is a virtual server running on quite serious hardware. The server can be scaled up to the following:</p>
+<pre><code>CPU     :  2x INTEL(R) XEON(R) PLATINUM 8580
+Threads :  240
+Memory  :  1TB
+GPU     :  None
+Storage :  Main disk : 2.0T /data
+           OS disk   : 58G  /</code></pre>
+<p>However, by default the server has fewer threads (usually around 224). To check from R how many threads are available, run <code>parallel::detectCores()</code>.</p>
+</section>
+<section id="transferring-data-to-the-server" class="level2">
+<h2 class="anchored" data-anchor-id="transferring-data-to-the-server">4.3. Transferring data to the server</h2>
+<p>RStudio server has a nice “upload” functionality in the files pane, where you can upload individual files or whole folders as a zip file (which is automatically extracted, nice for RStudio projects).</p>
+<p>Another, more robust option for transferring data to the server is through the <code>scp</code> (secure copy) command in the terminal of your own computer. For example, to transfer the folder <code>my_project</code> in the current working directory to your home folder on the server:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-rC</span> ./my_project username@msserver.fss.uu.nl:~/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="storing-data" class="level2">
+<h2 class="anchored" data-anchor-id="storing-data">4.4. Storing data</h2>
+<p>Please exclusively use your home directory (<code>/data/&lt;your-user-name&gt;/</code>, or alternatively <code>~/</code>), which is on the main drive. No other user has access to your files there (except the admin).</p>
+<p><em>Example</em></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>my_big_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="fl">1e4</span>, <span class="fl">1e4</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(my_big_matrix, <span class="st">"~/bigfile.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<blockquote class="blockquote">
+<p>[!CAUTION] Some programs or R packages store large amounts of data in the <code>/tmp</code> directory on the OS disk. Please make sure that this does not fill up the harddisk or the RStudio server will crash.</p>
+<p>For example, for <code>brms</code> / <code>cmdstanr</code>, first create a custom directory in your home directory (e.g., <code>~/tmp</code>), and then set <code>options(cmdstanr_output_dir = "~/tmp")</code> at the start of your script. Then, make sure to use the <code>cmdstanr</code> backend in your call to <code>brms::brm()</code>. If you are running <code>cmdstanr</code> in parallel, you may need to pass the temporary folder directly during the Markov chain Monte Carlo algorithm (e.g., <code>cmdstan_model$sample(…, output_dir = "~/tmp")</code>).</p>
+</blockquote>
+<section id="backing-up-your-data" class="level3">
+<h3 class="anchored" data-anchor-id="backing-up-your-data">4.4.1. Backing up your data</h3>
+<blockquote class="blockquote">
+<p>[!IMPORTANT] You are responsible for archiving your data. We provide no guarantees on backing up your data. Consider your home directory as temporary/scratch storage.</p>
+</blockquote>
+<p>After running simulations, it is wise to archive your results somewhere you can access them in case the hard drive of the server somehow breaks or if we need to free up the space. You can do this from the RStudio server by selecting “download” in the files tab.</p>
+<p>It can also be done using the <code>scp</code> command from your own computer via the terminal (if you have it installed).</p>
+<p><em>Example</em></p>
+<p>To copy the entire folder <code>simulation_folder</code> to the local backup folder <code>local_backup</code>, the user <code>testuser</code> can run the following command:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-rC</span> testuser@msserver.fss.uu.nl:~/simulation_folder local_backup</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="r-sessions" class="level2">
+<h2 class="anchored" data-anchor-id="r-sessions">4.5. R sessions</h2>
+<p>When you log in, you start an <code>R</code> session. It will remain open until you stop it, even if you close the window. To close the session, click the red ‘quit’ button in the top right corner. Please always close your <code>R</code> session when you are done. The current R version is the following:</p>
+<pre><code>R version 4.4.2 (2024-10-31) -- "Pile of Leaves"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu</code></pre>
+</section>
+<section id="r-packages" class="level2">
+<h2 class="anchored" data-anchor-id="r-packages">4.6. R packages</h2>
+<p>Everyone gets their own personal <code>R</code> package repository automatically in <code>~/R/packages</code>. There should not be any interference with package versions.</p>
+<p>For robustness, we have installed the <a href="https://pak.r-lib.org/"><code>pak</code> package manager</a>. Please use it. It can install packages from CRAN and Bioconductor (<code>pak::pak("tidyverse")</code>), GitHub (<code>pak::pak("vankesteren/pensynth")</code>) local files (<code>pak::local_install("~/uploads/my_package")</code>), and more.</p>
+<p>If installation fails for a package, this is likely due to system libraries not being installed. Please try to figure out which system library is needed, you can use the functions: <code>pak::pkg_sysreqs()</code> and <code>pak::sysreqs_check_installed()</code>. Contact the admin to install the system library for you.</p>
+<p>This is what such a warning may look like upon trying to install a package (missing <code>libmpfr-dev</code> library):</p>
+<pre><code>checking mpfr.h usability... no
+checking mpfr.h presence... no
+checking for mpfr.h... no
+configure: error: Header file mpfr.h not found; maybe use --with-mpfr-include=INCLUDE_PATH</code></pre>
+<p>In addition, global packages are installed for everyone to use by default. If you want to use a newer version of a preinstalled package, simply install it as normal and your own version will be used.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Preinstalled packages</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>devtools</code></td>
+<td style="text-align: left;">2.4.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>pak</code></td>
+<td style="text-align: left;">0.8.0.1</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="parallel-processing" class="level2">
+<h2 class="anchored" data-anchor-id="parallel-processing">4.7. Parallel processing</h2>
+<p>Multiple people can be logged into the server at the same time. If you reserve time on the server, you can use it, but please leave at least 4 cores available for other people to prepare their simulations.</p>
+<p>If you want to know how many cores are currently being used (and by whom), open a terminal (<code>shift + alt + R</code> in RStudio) and type <code>htop</code>.</p>
+<p>Parallel processing clusters can be set up using various packages, such as <code>parallel</code> (built into R), <code>future</code>, <code>parallelly</code> and more. An example is <code>cl &lt;- parallel::makeCluster(220)</code>.</p>
+<blockquote class="blockquote">
+<p>[!CAUTION] Make sure to close your cluster once you’re done with it, for example using <code>parallel::stopCluster(cl)</code>. Otherwise, the server will have many processes left open.</p>
+</blockquote>
+<p>I like using the package <a href="https://cran.r-project.org/web/packages/pbapply/pbapply.pdf"><code>pbapply</code></a> for parallel simulations, but you can use any method :)</p>
+<p>In R, some packages / functions use OpenMP to parallellize underlying C/C++ code. By default, the behaviour of these programs is to use all the cores of a system. An example of such a function is <code>mgcv::bam()</code>. If your code uses such functions, you can restrict the number of cores used by putting the following code at the top of your R script:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="st">"OMP_THREAD_LIMIT"</span> <span class="ot">=</span> <span class="dv">220</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="additional-software" class="level2">
+<h2 class="anchored" data-anchor-id="additional-software">4.8. Additional software</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Software</th>
+<th style="text-align: left;">Location</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Mplus</td>
+<td style="text-align: left;"><code>/opt/mplus/8.11</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>For python, please use <a href="https://docs.astral.sh/uv"><code>uv</code></a> to manage and run different versions for your own user account. This is portable, fast, and flexible.</li>
+<li>For Julia, use <a href="https://github.com/JuliaLang/juliaup"><code>juliaup</code></a> for the same reasons.</li>
+</ul>
+<p>If you have questions about additional software, send a message to the admin.</p>
+<section id="visual-studio-code-remote-programming" class="level3">
+<h3 class="anchored" data-anchor-id="visual-studio-code-remote-programming">4.8.1. Visual studio code remote programming</h3>
+<p>You can also connect to the server via visual studio code. Just install the Remote - SSH extension and use it to connect to the server via SSH.</p>
+</section>
+<section id="how-to-run-additional-software-with-a-gui" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-run-additional-software-with-a-gui">4.8.2. How to run additional software with a GUI</h3>
+<p>For Windows: 1. Install <a href="https://sourceforge.net/projects/xming/"><code>XMing</code></a> and <a href="https://putty.org/"><code>Putty</code></a>. 2. Run <code>XMing</code> on your computer – this will start an X server to accept incoming display connections 3. Run <code>putty</code> with the following configuration: - Host name: <code>msserver.fss.uu.nl</code> - Port: <code>22</code> - under <code>Connection &gt; SSH &gt; X11</code>: check <code>enable X11 forwarding</code> and set X display location = <code>localhost:0.0</code> 4. Click open in putty 5. type in your username and password 6. run the program, for example <code>pycharm</code>.</p>
+<p>A display should now open. If it does not, contact the administrator.</p>
+
+
+</section>
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>For background info on profiling, see e.g.&nbsp;the <a href="https://adv-r.hadley.nz/perf-measure.html#profiling">Advanced R</a> book. For practical tips on using the Profiling tool, see e.g.&nbsp;the <a href="https://support.posit.co/hc/en-us/articles/218221837-Profiling-R-code-with-the-RStudio-IDE">Posit</a> support page.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

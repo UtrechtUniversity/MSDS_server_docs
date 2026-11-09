@@ -100,12 +100,12 @@ After the machine has rebooted, ssh into it again with your account.
 
 ## 1.5. Add admin management program
 
-Several scripts can make adminning a bit easier and more user-friendly. We've created a separate repo for this: [vankesteren/adm](https://github.com/vankesteren/adm).
+Several scripts can make adminning a bit easier and more user-friendly. We've created a separate repo for this: [UtrechtUniversity/MSDS_server_adm](https://github.com/UtrechtUniversity/MSDS_server_adm).
 
 To install the admin program, run:
 
 ```sh
-sudo curl -fsSL https://raw.githubusercontent.com/vankesteren/adm/HEAD/install.sh | sh
+sudo curl -fsSL https://raw.githubusercontent.com/UtrechtUniversity/MSDS_server_adm/HEAD/install.sh | sh
 ```
 
 

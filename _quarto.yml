@@ -1,0 +1,26 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - index.qmd
+    - userdocs.qmd
+    - serveradmin.qmd
+    - serversetup.qmd
+    
+website:
+  title: "MSDS Compute Server documentation"
+  navbar:
+    right:
+      - href: userdocs.qmd
+        text: "User documentation"
+      - href: serveradmin.qmd
+        text: "Server administration guide"
+      - href: serversetup.qmd
+        text: "Server configuration guide"
+  favicon: server.png
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
